@@ -36,15 +36,15 @@ def get_failed_snapshot_requests():
 
         mycursor = mydb.cursor(dictionary=True)
 
-        # Format datetime objects for the SQL query (important!)
-        formatted_start_time = start_time.strftime('%Y-%m-%d %H:%M:%S') # MySQL datetime format
-        formatted_end_time = end_time.strftime('%Y-%m-%d %H:%M:%S')
+    
+        formatted_start_time = start_time.strftime('%Y-%m-%d %H:%M') # MySQL datetime format
+        formatted_end_time = end_time.strftime('%Y-%m-%d %H:%M')
 
 
         query = f"""
         SELECT * 
         FROM alice_db.SNAPSHOT_OFFLINE_REQUEST sor 
-        WHERE UPDATED_DATE BETWEEN '{formatted_start_time}' AND '{formatted_end_time}'
+        WHERE UPDATED_DATE BETWEEN '{start_time}' AND '{end_time}'
         AND STATUS = 'COMPLETED';
         """
 
@@ -53,16 +53,18 @@ def get_failed_snapshot_requests():
         results = mycursor.fetchall()
 
         if not results:
-            log_message = f"No failed snapshot requests found between {start_time} and {end_time}."
+            log_message = f"No failed snapshot requests found between {formatted_start_time} and {formatted_start_time}."
             print(log_message)
             logging.info(log_message)
             return
         
 
+        log_message = f"Found {len(results)} failed snapshot requests between {formatted_start_time} and {formatted_end_time}."
+        logging.info(log_message)
         for row in results:
             for key, value in row.items():
                 if isinstance(value, datetime):
-                    row[key] = value.isoformat()  # Keep datetime in ISO format in JSON
+                    row[key] = value.isoformat() 
 
         json_results = json.dumps(results, indent=2)
         logging.info(json_results)
