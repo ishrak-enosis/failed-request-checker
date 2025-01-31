@@ -4,7 +4,7 @@ This Python script monitors a MySQL database for failed snapshot requests and se
 
 ## Description
 
-The script connects to a MySQL database, queries for failed snapshot requests within a specified time range (defaulting to the last 24 hours), and sends an email notification if any failed requests are found.  It uses a transactional email service (Mailjet in this example) for reliable email delivery.
+The script connects to a MySQL database, queries for failed snapshot requests within a specified time range (defaulting to the last 24 hours), and sends an email notification if any failed requests are found. It uses a transactional email service (Mailjet in this example) for reliable email delivery.
 
 ## Setup
 
@@ -12,7 +12,7 @@ The script connects to a MySQL database, queries for failed snapshot requests wi
 
 *   Python 3.x installed.
 *   A MySQL database with the `alice_db.SNAPSHOT_OFFLINE_REQUEST` table.
-*   A Mailjet account (or another transactional email service with a free tier) with API keys.
+*   A Mailjet account with API keys.
 *   A verified sender email address on Mailjet.
 
 ### Installation
@@ -20,7 +20,7 @@ The script connects to a MySQL database, queries for failed snapshot requests wi
 1.  Clone the repository:
 
     ```bash
-    git clone [invalid URL removed]  # Replace with your repo URL
+    git clone [invalid URL removed] # Replace with your repo URL
     cd failed-snapshot-request-monitor
     ```
 
@@ -48,13 +48,23 @@ The script connects to a MySQL database, queries for failed snapshot requests wi
     mailjet_api_key_public = YOUR_MAILJET_PUBLIC_KEY
     mailjet_api_key_private = YOUR_MAILJET_PRIVATE_KEY
     sender_email = your_verified_mailjet_sender_email  # Must be verified on Mailjet
-    receiver_email = your_email@example.com
+    receiver_emails = email1@example.com, email2@example.com  # Comma-separated list
     ```
 
     **Important:**
     *   Replace the placeholder values with your actual credentials.
-    *   For Gmail (if you choose to use it temporarily for testing), create an "App Password" in your Gmail account settings and use that as the `sender_password`.  Do *not* use your regular Gmail password.
-    *   For production, it's even better to store the email password as an environment variable and retrieve it in your script using `os.environ.get("EMAIL_PASSWORD")`.
+    *   You **must** use a verified sender email address on Mailjet. See the Mailjet documentation below for details on how to verify your sender email.
+    *   Receiver emails should be a comma separated list.
+
+### Mailjet Setup and Documentation
+
+1.  **Sign up for a Mailjet account:** If you don't already have one, sign up for a free Mailjet account at [https://www.mailjet.com/](https://www.mailjet.com/).
+
+2.  **Get your API keys:**  In your Mailjet account dashboard, navigate to the API Keys section to obtain your public and private API keys.
+
+3.  **Verify your sender email address:**  You **must** verify the email address you want to use as the "From" address in your emails. This is a crucial step to prevent your emails from being marked as spam.  Follow the instructions in the Mailjet documentation to verify your sender email.
+
+4.  **Mailjet API Documentation:** For more detailed information about the Mailjet API and its features, please refer to the official Mailjet API documentation: [https://dev.mailjet.com/](https://dev.mailjet.com/)
 
 ### Running the script
 
