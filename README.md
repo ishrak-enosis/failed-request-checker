@@ -20,7 +20,7 @@ The script connects to a MySQL database, queries for failed snapshot requests wi
 1.  Clone the repository:
 
     ```bash
-    git clone [invalid URL removed] # Replace with your repo URL
+    git clone https://github.com/ishrak-enosis/failed-request-checker.git
     cd failed-snapshot-request-monitor
     ```
 
